@@ -10,6 +10,13 @@
 #import "SDWebImageDownloader.h"
 #import "SDWebImageOperation.h"
 
+@protocol MJWebImageDownloaderOperationDelegate <NSObject>
+
+- (nullable NSURLRequest*)modifyDownloadRequestIfNeeded:(nullable NSURLRequest *)originURLRequest;
+
+@end
+
+
 /**
  Describes a downloader operation. If one wants to use a custom downloader op, it needs to inherit from `NSOperation` and conform to this protocol
  For the description about these methods, see `SDWebImageDownloaderOperation`
@@ -55,6 +62,9 @@
  The download operation class for SDWebImageDownloader.
  */
 @interface SDWebImageDownloaderOperation : NSOperation <SDWebImageDownloaderOperation>
+
+/// Added by Joe
+@property (weak, nonatomic, nullable) id<MJWebImageDownloaderOperationDelegate> mjDelegate;
 
 /**
  * The request used by the operation's task.

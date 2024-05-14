@@ -228,7 +228,19 @@
             return;
         }
         
-        self.dataTask = [session dataTaskWithRequest:self.request];
+        // Replaced by Joe
+        if ([self.mjDelegate respondsToSelector:@selector(modifyDownloadRequestIfNeeded:)]) {
+            NSURLRequest *ipRequest = [self.mjDelegate modifyDownloadRequestIfNeeded:self.request];
+            if (ipRequest != nil) {
+                // 替换请求的url为 httpDNS处理过后的 ip url.
+                self.dataTask = [session dataTaskWithRequest:ipRequest];
+            } else {
+                self.dataTask = [session dataTaskWithRequest:self.request];
+            }
+        } else {
+            self.dataTask = [session dataTaskWithRequest:self.request];
+        }
+        //
         self.executing = YES;
     }
 
